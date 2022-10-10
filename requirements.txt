@@ -1,0 +1,10 @@
+django==4
+djangorestframework
+djangorestframework-simplejwt
+django-cors-headers
+Pillow
+django-environ
+django-filter
+drf_yasg
+django-email-verification
+mysqlclient
