@@ -43,7 +43,7 @@ class Company(models.Model):
 class Store(models.Model):
     company = models.ForeignKey(Company, related_name='stores', on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
-    address = models.CharField(max_length=256)
+    address = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
