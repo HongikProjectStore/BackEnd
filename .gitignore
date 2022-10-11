@@ -176,5 +176,5 @@ cython_debug/
 
 # End of https://www.toptal.com/developers/gitignore/api/django
 
-# wowstore/secrets.py
+wowstore/secrets.py
 media
