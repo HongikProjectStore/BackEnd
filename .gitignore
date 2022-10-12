@@ -178,3 +178,4 @@ cython_debug/
 
 wowstore/secrets.py
 media
+static
