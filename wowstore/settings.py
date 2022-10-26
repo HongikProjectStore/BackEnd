@@ -55,6 +55,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 MIDDLEWARE = [
+    'wowstore.custom_exception_handler.ExceptionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -130,6 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER':'wowstore.custom_exception_handler.handle_exception',
     'NON_FIELD_ERRORS_KEY' : 'error',
     'DEFAULT_FILTER_BACKENDS' : [
         'django_filters.rest_framework.DjangoFilterBackend',
