@@ -8,5 +8,5 @@ router.register('comment', CommentViewSet, basename= "comment")
 router.register('', BoardViewSet, basename= "board")
 
 urlpatterns = router.urls + [
-    path('likeBoards/<int:pk>/', LikeBoardsView.as_view()),
+    path('like_board/<int:pk>/', LikeBoardsView.as_view()),
 ] 
