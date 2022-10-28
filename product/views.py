@@ -28,16 +28,25 @@ class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomReadOnly]
 
     def get_serializer_class(self):
-        if self.action == 'list' or 'retrieve':
+        if self.action == 'list' or self.action == 'retrieve':
             return ProductSerializer
         return ProductCreateSerializer
+
+    def retrieve(self, request, pk):
+        queryset = Product.objects.all()
+        product = get_object_or_404(queryset, pk=pk)
+        if self.request.user.is_authenticated:
+            if request.user not in product.views.all():
+                product.views.add(self.request.user)
+        serializer = ProductSerializer(product)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
     permission_classes = [CustomReadOnly]
 
     def get_serializer_class(self):
-        if self.action == 'list' or 'retrieve':
+        if self.action == 'list' or self.action == 'retrieve':
             return CompanySerializer
         return CompanyCreateSerializer
 
@@ -46,7 +55,7 @@ class StockViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomReadOnly]
 
     def get_serializer_class(self):
-        if self.action == 'list' or 'retrieve':
+        if self.action == 'list' or self.action == 'retrieve':
             return StockSerializer
         return StockCreateSerializer
 
@@ -55,16 +64,20 @@ class StoreViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomReadOnly]
 
     def get_serializer_class(self):
-        if self.action == 'list' or 'retrieve':
+        if self.action == 'list' or self.action == 'retrieve':
             return StoreSerializer
         return StoreCreateSerializer
+
+    def perform_create(self, serializer):
+        company = Company.objects.get(name=self.request.data['company'])
+        serializer.save(company=company)
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     permission_classes = [CustomReadOnly]
 
     def get_serializer_class(self):
-        if self.action == 'list' or 'retrieve':
+        if self.action == 'list' or self.action == 'retrieve':
             return EventSerializer
         return EventCreateSerializer
 
