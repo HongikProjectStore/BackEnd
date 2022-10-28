@@ -23,7 +23,7 @@ class BoardViewSet(viewsets.ModelViewSet):
     filterset_fields = ['author','likes']
 
     def get_serializer_class(self):
-        if self.action == 'list' or 'retrieve':
+        if self.action == 'list' or self.action == 'retrieve':
             return BoardSerializer
         return BoardCreateSerializer
 
@@ -46,7 +46,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     filterset_fields = ['author']
     
     def get_serializer_class(self):
-        if self.action == 'list' or 'retrieve':
+        if self.action == 'list' or self.action == 'retrieve':
             return CommentSerializer
         return CommentCreateSerializer
     
