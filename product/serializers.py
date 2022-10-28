@@ -53,6 +53,10 @@ class CompanySerializer(serializers.ModelSerializer):
         fields = ("pk", "name", "store", "events", "store")
 
 class CompanyCreateSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(
+        required = True,
+        validators =[UniqueValidator(queryset=Company.objects.all())],
+    )
     class Meta:
         model = Company
         fields = '__all__'
