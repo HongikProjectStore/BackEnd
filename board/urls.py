@@ -1,12 +1,12 @@
-from django.urls import path
+from django.urls import path, re_path
 from rest_framework import routers
 
 from .views import CommentViewSet, BoardViewSet ,LikeBoardsView
 
 router = routers.SimpleRouter()
-router.register('', BoardViewSet)
-router.register('comments', CommentViewSet)
+router.register('comment', CommentViewSet, basename= "comment")
+router.register('', BoardViewSet, basename= "board")
 
 urlpatterns = router.urls + [
-    path('likeBoards/<int:pk>/', LikeBoardsView.as_view()),
+    path('like_board/<int:pk>/', LikeBoardsView.as_view()),
 ] 

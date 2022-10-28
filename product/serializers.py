@@ -26,12 +26,24 @@ class StoreSerializer(serializers.ModelSerializer):
     stocks = StockSerializer(many=True, read_only=True)
     class Meta:
         model = Store
-        fields = ("pk","name","company","address","stocks")
+        fields = ("pk","store_id", "company", "business_name","branch_name", "address", "postcode", "longitude","latitude","stocks")
 
 class StoreCreateSerializer(serializers.ModelSerializer):
+    store_id = serializers.CharField(
+        required = True,
+        validators =[UniqueValidator(queryset=Store.objects.all())],
+    )
+    company = serializers.CharField(
+        required=True
+    )
+    postcode = serializers.IntegerField(
+        required = False,
+        allow_null=True
+    )
+
     class Meta:
         model = Store
-        fields = ("name", "company","address", "stocks")
+        fields = ("store_id", "company", "business_name","branch_name", "address", "postcode", "longitude","latitude")
 
 class CompanySerializer(serializers.ModelSerializer):
     events = EventSerializer(many=True, read_only=True)
@@ -50,7 +62,7 @@ class ProductSerializer(serializers.ModelSerializer):
     stocks = StockSerializer(many=True, read_only=True)
     class Meta:
         model = Product
-        fields = ("pk","name","kind","manufacturer", "price", "image", "likes", "events", "stocks")
+        fields = ("pk","name","kind","manufacturer", "price", "image", "views","likes", "events", "stocks")
 
 class ProductCreateSerializer(serializers.ModelSerializer):    
     class Meta:

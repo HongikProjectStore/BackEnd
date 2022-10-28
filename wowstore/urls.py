@@ -35,7 +35,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include("authentication.urls")),
-    path('boards/', include("board.urls")),
+    path('board/', include("board.urls")),
     path('product/', include("product.urls"))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

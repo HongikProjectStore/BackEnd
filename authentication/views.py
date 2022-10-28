@@ -108,7 +108,12 @@ class ChangePasswordView(generics.UpdateAPIView):
         if serializer.is_valid(raise_exception=True):
             # Check old password
             if not user.check_password(serializer.validated_data['old_password']):
-                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({
+                    "message": "Password was wrong.",
+                    "result": {},
+                    "status": False,
+                    "status_code": 400
+                }, status=status.HTTP_400_BAD_REQUEST)
             # set_password also hashes the password that the user will get
             user.set_password(serializer.validated_data['password'])
             user.save()
