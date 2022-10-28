@@ -29,6 +29,7 @@ class Product(models.Model):
     manufacturer = models.CharField(max_length=128)
     price = models.PositiveIntegerField()
     image = models.ImageField(upload_to='products/', default='default_product.png')
+    views = models.ManyToManyField(User, related_name='view_products', blank=True)
     likes = models.ManyToManyField(User, related_name='like_products', blank=True)
 
     def __str__(self):
@@ -41,17 +42,22 @@ class Company(models.Model):
         return self.name
 
 class Store(models.Model):
+    store_id = models.IntegerField()
     company = models.ForeignKey(Company, related_name='stores', on_delete=models.CASCADE)
-    name = models.CharField(max_length=128)
+    business_name = models.CharField(max_length=128)
+    branch_name = models.CharField(max_length=128)
     address = models.CharField(max_length=255)
+    postcode = models.IntegerField(null=True)
+    longitude = models.FloatField()
+    latitude = models.FloatField()
 
     def __str__(self):
-        return self.name
+        return self.branch_name
 
 class Stock(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     store = models.ForeignKey(Store,related_name='stocks', on_delete=models.CASCADE)
-    counts = models.PositiveIntegerField()
+    counts = models.IntegerField()
 
     class Meta:
         constraints = [
