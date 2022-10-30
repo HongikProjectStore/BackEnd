@@ -1,6 +1,7 @@
+
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, status, filters, generics
 from rest_framework.views import APIView
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
@@ -20,12 +21,15 @@ from .serializers import (
     EventCreateSerializer,
 )
 from .permissions import CustomReadOnly
-
 # Create your views here.
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     permission_classes = [CustomReadOnly]
+    filter_backends = [filters.OrderingFilter, filters.SearchFilter, DjangoFilterBackend]
+    filterset_fields = ['category',]
+    ordering_fields = ['price','views','likes',]
+    search_fields = ['name']
 
     def get_serializer_class(self):
         if self.action == 'list' or self.action == 'retrieve':
@@ -53,6 +57,8 @@ class CompanyViewSet(viewsets.ModelViewSet):
 class StockViewSet(viewsets.ModelViewSet):
     queryset = Stock.objects.all()
     permission_classes = [CustomReadOnly]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['product', 'store']
 
     def get_serializer_class(self):
         if self.action == 'list' or self.action == 'retrieve':
@@ -62,6 +68,7 @@ class StockViewSet(viewsets.ModelViewSet):
 class StoreViewSet(viewsets.ModelViewSet):
     queryset = Store.objects.all()
     permission_classes = [CustomReadOnly]
+    # filter_backends = [NearestNeighborFilterBackend]
 
     def get_serializer_class(self):
         if self.action == 'list' or self.action == 'retrieve':
@@ -75,6 +82,8 @@ class StoreViewSet(viewsets.ModelViewSet):
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     permission_classes = [CustomReadOnly]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['product','company']
 
     def get_serializer_class(self):
         if self.action == 'list' or self.action == 'retrieve':

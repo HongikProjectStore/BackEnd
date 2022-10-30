@@ -46,11 +46,10 @@ class StoreCreateSerializer(serializers.ModelSerializer):
         fields = ("store_id", "company", "business_name","branch_name", "address", "postcode", "longitude","latitude")
 
 class CompanySerializer(serializers.ModelSerializer):
-    events = EventSerializer(many=True, read_only=True)
-    store = StoreSerializer(many=True, read_only=True)    
     class Meta:
         model = Company
-        fields = ("pk", "name", "store", "events", "store")
+        fields = ("pk", "name")
+
 
 class CompanyCreateSerializer(serializers.ModelSerializer):
     name = serializers.CharField(
@@ -63,13 +62,16 @@ class CompanyCreateSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):    
     events = EventSerializer(many=True, read_only=True)
-    stocks = StockSerializer(many=True, read_only=True)
     class Meta:
         model = Product
-        fields = ("pk","name","kind","manufacturer", "price", "image", "views","likes", "events", "stocks")
+        fields = ("pk","name","category","manufacturer", "price", "image", "views","likes", "events")
 
 class ProductCreateSerializer(serializers.ModelSerializer):    
+    name = serializers.CharField(
+        required = True,
+        validators =[UniqueValidator(queryset=Product.objects.all())],
+    )
     class Meta:
         model = Product
-        fields = ("name","kind","manufacturer", "price", "image")
+        fields = ("name","category","manufacturer", "price", "image")
 
