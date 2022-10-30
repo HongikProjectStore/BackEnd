@@ -1,5 +1,6 @@
 from authentication.models import User
 from django.db import models
+from django.contrib.gis.db import models
 from django.utils import timezone
 
 EVENT_TYPE = (
@@ -10,7 +11,7 @@ EVENT_TYPE = (
     ('DUM','Dummy'),
 )
 
-PRODUCT_KIND = (
+PRODUCT_CATEGORY = (
     ('Meal','Meal'),
     ('Food','Food'),        
     ('Bakery','Bakery'),
@@ -25,7 +26,7 @@ PRODUCT_KIND = (
 # Create your models here.
 class Product(models.Model):
     name = models.CharField(max_length=128)
-    kind = models.CharField(max_length=12, choices=PRODUCT_KIND)
+    category = models.CharField(max_length=12, choices=PRODUCT_CATEGORY)
     manufacturer = models.CharField(max_length=128)
     price = models.PositiveIntegerField()
     image = models.ImageField(upload_to='products/', default='default_product.png')
