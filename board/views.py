@@ -8,7 +8,7 @@ from .serializers import CommentCreateSerializer, CommentSerializer, BoardSerial
 from django_filters.rest_framework import DjangoFilterBackend
 # Create your views here.
 
-from rest_framework import status
+from rest_framework import status,filters
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
@@ -19,8 +19,9 @@ from rest_framework.views import APIView
 class BoardViewSet(viewsets.ModelViewSet):
     queryset = Board.objects.all()
     permission_classes = [CustomReadOnly]
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['author','likes']
+    ordering_fields = ['published_date']
 
     def get_serializer_class(self):
         if self.action == 'list' or self.action == 'retrieve':
