@@ -24,3 +24,4 @@ class NearestNeighborFilterBackend(filters.BaseFilterBackend):
         .order_by('distance')
         queryset = queryset.filter(distance__lt=2000)
         return queryset[:50]
+        

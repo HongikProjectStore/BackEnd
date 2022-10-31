@@ -82,11 +82,6 @@ class StoreViewSet(viewsets.ModelViewSet):
         company = Company.objects.get(name=self.request.data['company'])
         serializer.save(company=company)
 
-        # def save(self, *args, **kwargs):
-        #     self.latitude  = self.mpoint.y
-        #     self.longitude = self.mpoint.x   
-        #     super(Store, self).save(*args, **kwargs)  
-
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     permission_classes = [CustomReadOnly]
