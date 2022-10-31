@@ -23,4 +23,4 @@ class NearestNeighborFilterBackend(filters.BaseFilterBackend):
         .annotate(distance=distance_raw_sql) \
         .order_by('distance')
         queryset = queryset.filter(distance__lt=2000)
-        return queryset
+        return queryset[:50]
