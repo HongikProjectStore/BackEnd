@@ -7,6 +7,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
 from authentication import views
+from product.custom_filter import NearestNeighborFilterBackend
 from .models import Product, Company, Stock, Store, Event
 from .serializers import (
     ProductSerializer,
@@ -68,7 +69,9 @@ class StockViewSet(viewsets.ModelViewSet):
 class StoreViewSet(viewsets.ModelViewSet):
     queryset = Store.objects.all()
     permission_classes = [CustomReadOnly]
-    # filter_backends = [NearestNeighborFilterBackend]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['business_name', 'branch_name', 'address']
+    
 
     def get_serializer_class(self):
         if self.action == 'list' or self.action == 'retrieve':
@@ -78,6 +81,11 @@ class StoreViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         company = Company.objects.get(name=self.request.data['company'])
         serializer.save(company=company)
+
+        # def save(self, *args, **kwargs):
+        #     self.latitude  = self.mpoint.y
+        #     self.longitude = self.mpoint.x   
+        #     super(Store, self).save(*args, **kwargs)  
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -100,3 +108,8 @@ class LikeProductView(APIView):
         else:
            product.likes.add(self.request.user)
         return Response({'status':'ok'}, status=status.HTTP_200_OK)
+
+class NearestNeighborStoreView(generics.ListAPIView):
+    queryset = Store.objects.all()
+    serializer_class = StoreSerializer
+    filter_backends = [NearestNeighborFilterBackend]

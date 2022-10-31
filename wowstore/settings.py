@@ -24,8 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = MY_SECRET_KEY['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '43.200.205.125']
 
@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'rest_framework',
     'rest_framework_simplejwt',
-    'rest_framework_gis',
     'rest_framework_simplejwt.token_blacklist',
     'django_filters',
     'corsheaders',
@@ -52,7 +51,7 @@ INSTALLED_APPS = [
     'board',
     'product',
 ]
-
+SITE_ID=1
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
@@ -103,13 +102,17 @@ WSGI_APPLICATION = 'wowstore.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = MY_DATABASES
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+# DATABASES = MY_DATABASES
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'wowstore',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+    }
+}
 
 
 
@@ -218,6 +221,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # DEFAULT_FROM_EMAIL = 'wowstore<noreply@wowstore.com>'
-
-# GDAL_LIBRARY_PATH = '/opt/homebrew/opt/gdal/lib/libgdal.dylib'
-# GEOS_LIBRARY_PATH = '/opt/homebrew/opt/geos/lib/libgeos_c.dylib'

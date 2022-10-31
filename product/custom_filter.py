@@ -1,23 +1,26 @@
+from .models import Store
+from rest_framework import filters
+from django.db.models.expressions import RawSQL
 
-import django_filters
-from .models import Product
-# from rest_framework import filters
+class NearestNeighborFilterBackend(filters.BaseFilterBackend):
+    """
+    Filter that only allows users to see their own objects.
+    """
+    def filter_queryset(self, request, queryset, view):
+        longitude = request.query_params.get("longitude", None)
+        latitude = request.query_params.get("latitude", None)
 
-from django.contrib.gis.db.models.functions import Distance
-from django.contrib.gis.measure import D
-from django.contrib.gis.geos import Point    
-
-# class NearestNeighborFilterBackend(filters.BaseFilterBackend):
-#     """
-#     Filter that only allows users to see their own objects.
-#     """
-#     def filter_queryset(self, request, queryset, view):
-#         longitude = request.query_params.get("longitude", None)
-#         latitude = request.query_params.get("latitude", None)
-
-#         ref_location = Point(longitude, latitude, srid=4326)
-#         queryset = Store.objects.filter(location__dwithin=(ref_location, 0.02)). \
-#             filter(location__distance_lte=(ref_location, D(m=2000))). \
-#             annotate(distance=Distance('location', ref_location)).order_by('distance')
-
-#         return queryset
+        gcd_formula = "6371 * acos(least(greatest(\
+        cos(radians(%s)) * cos(radians(latitude)) \
+        * cos(radians(longitude) - radians(%s)) + \
+        sin(radians(%s)) * sin(radians(latitude)) \
+        , -1), 1))"
+        distance_raw_sql = RawSQL(
+            gcd_formula,
+            (latitude, longitude, latitude)
+        )
+        queryset = Store.objects.all() \
+        .annotate(distance=distance_raw_sql) \
+        .order_by('distance')
+        queryset = queryset.filter(distance__lt=2000)
+        return queryset
