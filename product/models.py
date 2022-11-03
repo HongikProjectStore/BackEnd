@@ -26,9 +26,10 @@ PRODUCT_CATEGORY = (
 class Product(models.Model):
     name = models.CharField(max_length=128)
     category = models.CharField(max_length=12, choices=PRODUCT_CATEGORY)
-    manufacturer = models.CharField(max_length=128)
+    manufacturer = models.CharField(max_length=128, blank=True)
     price = models.PositiveIntegerField()
-    image = models.ImageField(upload_to='products/', default='default_product.png')
+    description = models.TextField(default='')
+    image = models.URLField(default='http://43.200.205.125:8000/media/default_product.png')
     views = models.ManyToManyField(User, related_name='view_products', blank=True)
     likes = models.ManyToManyField(User, related_name='like_products', blank=True)
 

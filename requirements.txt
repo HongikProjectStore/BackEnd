@@ -8,3 +8,6 @@ django-filter
 drf_yasg
 django-email-verification
 mysqlclient
+schedule
+selenium
+webdriver_manager

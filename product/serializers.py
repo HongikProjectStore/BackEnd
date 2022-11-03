@@ -60,18 +60,21 @@ class CompanyCreateSerializer(serializers.ModelSerializer):
         model = Company
         fields = '__all__'
 
-class ProductSerializer(serializers.ModelSerializer):    
+class ProductSerializer(serializers.ModelSerializer):  
     events = EventSerializer(many=True, read_only=True)
     class Meta:
         model = Product
-        fields = ("pk","name","category","manufacturer", "price", "image", "views","likes", "events")
+        fields = ("pk","name","category","manufacturer", "price", "description","image", "views","likes", "events")
 
 class ProductCreateSerializer(serializers.ModelSerializer):    
     name = serializers.CharField(
         required = True,
         validators =[UniqueValidator(queryset=Product.objects.all())],
     )
+    manufacturer = serializers.CharField(
+        required = False,
+    )
     class Meta:
         model = Product
-        fields = ("name","category","manufacturer", "price", "image")
+        fields = ("name","category","manufacturer", "price", "description","image")
 

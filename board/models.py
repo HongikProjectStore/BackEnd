@@ -13,8 +13,14 @@ class Board(models.Model):
     likes = models.ManyToManyField(User, related_name='like_boards', blank=True)
     published_date = models.DateTimeField(default=timezone.now)
 
+    def __str__(self):
+        return self.title
+
 class Comment(models.Model):
     author = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
     board = models.ForeignKey(Board, related_name='comments', on_delete=models.CASCADE)
     text = models.TextField()
     published_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.text
