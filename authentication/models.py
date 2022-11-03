@@ -18,8 +18,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    gender = models.CharField(max_length=1, blank=True, choices=GENDER)
-    birth = models.DateField(max_length=128, blank=True)
+    gender = models.CharField(max_length=1, null=True, choices=GENDER)
+    birth = models.DateField(max_length=128, null=True)
     image = models.ImageField(upload_to='profile/', default='default_user.png')
 
     USERNAME_FIELD = 'email'
