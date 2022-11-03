@@ -26,7 +26,7 @@ PRODUCT_CATEGORY = (
 class Product(models.Model):
     name = models.CharField(max_length=128)
     category = models.CharField(max_length=12, choices=PRODUCT_CATEGORY)
-    manufacturer = models.CharField(max_length=128, blank=True)
+    manufacturer = models.CharField(max_length=128, default='')
     price = models.PositiveIntegerField()
     description = models.TextField(default='')
     image = models.URLField(default='http://43.200.205.125:8000/media/default_product.png')
