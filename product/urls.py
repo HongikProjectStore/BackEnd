@@ -12,8 +12,8 @@ router.register('', ProductViewSet, basename= "product")
 urlpatterns = [
     path('store/distance/', NearestNeighborStoreView.as_view()),
     path('like_product/<int:pk>/', LikeProductView.as_view()),
-    path('name/',ProductExactNameView.as_view()),
-    path('now_event/',EventProductView.as_view()),
+    path('name/', ProductExactNameView.as_view()),
+    path('now_event/', EventProductView.as_view()),
 ]
 
 urlpatterns = urlpatterns + router.urls
