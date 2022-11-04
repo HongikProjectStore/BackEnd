@@ -114,6 +114,6 @@ class NearestNeighborStoreView(generics.ListAPIView):
 class ProductExactNameView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [filters.SearchFilter]
     search_fields = ['=name']
 
