@@ -49,6 +49,8 @@ class ProductViewSet(viewsets.ModelViewSet):
 class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
     permission_classes = [CustomReadOnly]
+    filter_backends = [filters.SearchFilter]
+    filterset_fields = ['name']
 
     def get_serializer_class(self):
         if self.action == 'list' or self.action == 'retrieve':
@@ -108,3 +110,10 @@ class NearestNeighborStoreView(generics.ListAPIView):
     queryset = Store.objects.all()
     serializer_class = StoreSerializer
     filter_backends = [NearestNeighborFilterBackend]
+
+class ProductExactNameView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = [DjangoFilterBackend]
+    search_fields = ['=name']
+
