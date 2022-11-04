@@ -117,3 +117,8 @@ class ProductExactNameView(generics.ListAPIView):
     filter_backends = [filters.SearchFilter]
     search_fields = ['=name']
 
+class EventProductView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        return Product.objects.exclude(events__exact=None)
