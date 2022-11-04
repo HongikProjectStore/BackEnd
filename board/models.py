@@ -7,7 +7,7 @@ class Board(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE,related_name = 'boards')
     title = models.CharField(max_length = 128)
     category = models.CharField(max_length = 128)
-    body = models.TextField()
+    body = models.TextField(null=True, blank=True)
     image = models.ImageField(upload_to='boards/', default='default.png')
     views = models.ManyToManyField(User, related_name='view_boards', blank=True)
     likes = models.ManyToManyField(User, related_name='like_boards', blank=True)
