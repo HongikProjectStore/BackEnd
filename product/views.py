@@ -50,7 +50,7 @@ class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
     permission_classes = [CustomReadOnly]
     filter_backends = [filters.SearchFilter]
-    filterset_fields = ['name']
+    filterset_fields = ['=name']
 
     def get_serializer_class(self):
         if self.action == 'list' or self.action == 'retrieve':
