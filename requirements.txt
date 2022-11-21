@@ -11,3 +11,4 @@ mysqlclient
 schedule
 selenium
 webdriver_manager
+surprise
