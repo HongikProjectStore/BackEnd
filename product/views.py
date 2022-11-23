@@ -22,6 +22,14 @@ from .serializers import (
     EventCreateSerializer,
 )
 from .permissions import CustomReadOnly
+
+from surprise import dump
+import pandas as pd
+from .recommendation import get_unseen_product, recommend_product_by_userid
+import os
+import random
+from wowstore.settings import DEBUG
+
 # Create your views here.
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -122,3 +130,34 @@ class EventProductView(generics.ListAPIView):
 
     def get_queryset(self):
         return Product.objects.exclude(events__exact=None)
+
+class RecommendationView(APIView):
+    def get(self, request, format=None):
+        if request.user and request.user.is_authenticated:
+            userId = request.user.pk % 671
+        else :
+            userId = random.randrange(1,671)
+
+        file1 = "rating_matrix.pickle"
+        file2 = "ratings_pred_matrix.pickle"
+        if DEBUG == True:
+            rating_matrix = dump.load(os.path.join('/Users/kali/BackEnd/product/', file1))
+            ratings_pred_matrix = dump.load(os.path.join('/Users/kali/BackEnd/product/', file2))
+        else:
+            rating_matrix = dump.load(os.path.join('/home/ubuntu/resources/', file1))
+            ratings_pred_matrix = dump.load(os.path.join('/home/ubuntu/resources/', file2))
+
+        rating_matrix = list(rating_matrix)
+        ratings_pred_matrix = list(ratings_pred_matrix)
+
+        top_n = 20
+        unseen_list = get_unseen_product(rating_matrix[0], userId)
+        recomm_products = recommend_product_by_userid(ratings_pred_matrix[0], userId, unseen_list, top_n=top_n)
+        recomm_products = pd.DataFrame(data= recomm_products.values, index=recomm_products.index, columns=['pred_score'])
+        
+        response = []
+        for i in range(0, recomm_products.shape[0]):
+            product = Product.objects.get(name=recomm_products.index[i])
+            serializer = ProductSerializer(product)
+            response.append(serializer.data)
+        return Response(response, status=status.HTTP_200_OK)
